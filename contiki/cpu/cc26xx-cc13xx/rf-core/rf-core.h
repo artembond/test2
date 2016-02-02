@@ -218,7 +218,6 @@ typedef struct rf_core_primary_mode_s {
 /*---------------------------------------------------------------------------*/
 /* Command Types */
 #define RF_CORE_COMMAND_TYPE_MASK                        0x0C00
-#define RF_CORE_COMMAND_TYPE_IMMEDIATE                   0x0000
 #define RF_CORE_COMMAND_TYPE_RADIO_OP                    0x0800
 #define RF_CORE_COMMAND_TYPE_IEEE_BG_RADIO_OP            0x0800
 #define RF_CORE_COMMAND_TYPE_IEEE_FG_RADIO_OP            0x0C00
@@ -331,17 +330,19 @@ uint8_t rf_core_boot(void);
 void rf_core_setup_interrupts(void);
 
 /**
- * \brief Enable the LAST_CMD_DONE interrupt.
+ * \brief Enable interrupt on command done.
+ * \param fg set true to enable irq on foreground command done and false for
+ * background commands or if not in ieee mode.
  *
  * This is used within TX routines in order to be able to sleep the CM3 and
  * wake up after TX has finished
  *
  * \sa rf_core_cmd_done_dis()
  */
-void rf_core_cmd_done_en(void);
+void rf_core_cmd_done_en(bool fg);
 
 /**
- * \brief Disable the LAST_CMD_DONE interrupt.
+ * \brief Disable the LAST_CMD_DONE and LAST_FG_CMD_DONE interrupts.
  *
  * This is used within TX routines after TX has completed
  *
